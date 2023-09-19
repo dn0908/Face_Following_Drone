@@ -1,11 +1,14 @@
 import cv2
 import numpy as np
 
-frameWidth = 640
-frameHeight = 480
+######## FRAME SETTINGS ########
+frame_W = 640
+frame_H = 480
+################################
+
 cap = cv2.VideoCapture(1)
-cap.set(3, frameWidth)
-cap.set(4, frameHeight)
+cap.set(3, frame_W)
+cap.set(4, frame_H)
 
 deadZone=100
 global imgContour
@@ -62,7 +65,7 @@ def stackImages(scale,imgArray):
 
 def getContours(img,imgContour):
 
-    contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     for cnt in contours:
         area = cv2.contourArea(cnt)
         areaMin = cv2.getTrackbarPos("Area", "Parameters")
@@ -121,7 +124,7 @@ while True:
     s_max = cv2.getTrackbarPos("SAT Max", "HSV")
     v_min = cv2.getTrackbarPos("VALUE Min", "HSV")
     v_max = cv2.getTrackbarPos("VALUE Max", "HSV")
-    print(h_min)
+    # print(h_min)
 
     lower = np.array([h_min,s_min,v_min])
     upper = np.array([h_max,s_max,v_max])
@@ -129,6 +132,7 @@ while True:
     result = cv2.bitwise_and(img,img, mask = mask)
     mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
 
+    # preprocessing
     imgBlur = cv2.GaussianBlur(result, (7, 7), 1)
     imgGray = cv2.cvtColor(imgBlur, cv2.COLOR_BGR2GRAY)
     threshold1 = cv2.getTrackbarPos("Threshold1", "Parameters")
@@ -139,9 +143,9 @@ while True:
     getContours(imgDil, imgContour)
     display(imgContour)
 
-    stack = stackImages(0.7,([img,result],[imgDil,imgContour]))
+    stack = stackImages(0.5,([img,result],[imgDil,imgContour]))
 
-    cv2.imshow('Horizontal Stacking', stack)
+    cv2.imshow('_', stack)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
