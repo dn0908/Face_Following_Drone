@@ -22,7 +22,7 @@ me.speed = 0
 
 
 
-print(me.get_battery())
+# print(me.get_battery())
 
 me.streamoff()
 me.streamon()
@@ -41,7 +41,7 @@ global dir;
 def empty(a):
     pass
 
-cv2.namedWindow("HSV")
+cv2.namedWindow("1")
 cv2.resizeWindow("HSV",640,240)
 cv2.createTrackbar("HUE Min","HSV",20,179,empty)
 cv2.createTrackbar("HUE Max","HSV",40,179,empty)
@@ -50,10 +50,10 @@ cv2.createTrackbar("SAT Max","HSV",255,255,empty)
 cv2.createTrackbar("VALUE Min","HSV",89,255,empty)
 cv2.createTrackbar("VALUE Max","HSV",255,255,empty)
 
-cv2.namedWindow("Parameters")
+cv2.namedWindow("2")
 cv2.resizeWindow("Parameters",640,240)
-cv2.createTrackbar("Threshold1","Parameters",166,255,empty)
-cv2.createTrackbar("Threshold2","Parameters",171,255,empty)
+cv2.createTrackbar("Thresh1","Parameters",166,255,empty)
+cv2.createTrackbar("Thresh2","Parameters",171,255,empty)
 cv2.createTrackbar("Area","Parameters",1750,30000,empty)
 
 
@@ -90,7 +90,7 @@ def stackImages(scale,imgArray):
 
 def getContours(img,imgContour):
     global dir
-    contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     for cnt in contours:
         area = cv2.contourArea(cnt)
         areaMin = cv2.getTrackbarPos("Area", "Parameters")
@@ -193,7 +193,7 @@ while True:
     cv2.imshow('Horizontal Stacking', stack)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
-        me.land()
+        me.land() # land tello
         break
 
 # cap.release()
